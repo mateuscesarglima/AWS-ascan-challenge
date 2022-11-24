@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ascan-challenge
+
+  API created for atlantico-academy-challenge
+
+Globals:
+  Function:
+    Timeout: 10
+    Tracing: Active
+  Api:
+    TracingEnabled: True
+
+Resources:
+  FetchAllUsers:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: rest/
+      Handler: app.FetchAllUsers
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        FetchAllUsers:
+          Type: Api
+          Properties:
+            Path: /FetchAllUsers
+            Method: GET
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+
+  CreateUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: rest/
+      Handler: app.CreateUser
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /CreateUser
+            Method: POST
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+
+  UpdateUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: rest/
+      Handler: app.UpdateUser
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        UpdateUser:
+          Type: Api
+          Properties:
+            Path: /UpdateUser/{id}
+            Method: PUT
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+
+  DeleteUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: rest/
+      Handler: app.DeleteUser
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        DeleteUser:
+          Type: Api
+          Properties:
+            Path: /DeleteUser/{id}
+            Method: DELETE
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: usersDB
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+Outputs:
+  ascanChallengeApi:
+    Description: "REST API"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
