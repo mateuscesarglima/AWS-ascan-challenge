@@ -31,7 +31,7 @@ exports.CreateUser = async (event, context) => {
     .promise();
   response = {
     statusCode: 200,
-    body: JSON.stringify({ message: "User Created successfuly" }),
+    body: JSON.stringify({ message: "User Created successfully" }),
   };
   return response;
 };
@@ -47,7 +47,7 @@ exports.DeleteUser = async (event, context) => {
     .promise();
   response = {
     statusCode: 200,
-    body: JSON.stringify({ message: "User is Deleted" }),
+    body: JSON.stringify({ message: "User deleted successfully" }),
   };
   return response;
 };
@@ -71,7 +71,7 @@ exports.UpdateUser = async (event, context) => {
     .promise();
   response = {
     statusCode: 200,
-    body: JSON.stringify({ message: "User is Updated" }),
+    body: JSON.stringify({ message: "User updated successfully " }),
   };
   return response;
 };
